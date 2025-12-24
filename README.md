@@ -143,4 +143,26 @@ Please follow the following steps:
 
 Now, we are going to set this data up in PostgreSQL to simulate the real world data flow.
 ## Set up PostgreSQL
-
+The reason we are using the PostgreSQL is beacuse it is free to use and it is open source, along with the fact that it also supports DirectQuery in Power BI. You check the data supported data sources here. To set up PostgreSQL follow this steps:
+1. Download and install the PostgreSQL from here, make sure to remember when you enter the admin credentials when you are prompted
+2. Open the pgadmin 4 and make a new database I named it test
+3. Make a new login which can be used in Power BI and On-premises data gateway, make sure to assign the role pg_read_all_data
+4. Go to Server > test > Schema > Tables, right click on tables and create a new table, we will need to make 4 tables like belows, make sure to use the same datatypes
+5. For the Customers use the following settings:
+![Image](Image)
+6. For the Products table use the following settings:
+![Image](Image)
+7. For the Orders table use the following settings:
+![Image](Image)
+8. For the DateDim table use the following settings:
+![Image](Image)
+9. Before we start importing data to this server we need to a transformation in the .csv files. The dates in the columns came out in the .csv files like "YYYY-MM-DD ##:##:##.###" but we need "YYYY-MM-DD" as set up in the schema
+To do this we are going to use a small python script, I am sure you can do the same in Power BI but as long as we reach our goals the questions about which tools we use are inconsequential.
+Here is the python script that I used:
+```
+```
+You will have to run this script for three columns 'DateDim.date', 'DateDim.First Day of Month' and 'Orders.OrderDate'
+10. To import, right click on the table and select Import/Export data option which will pop up a window where toggle to Import mode, give the file path, .csv format, and encoding to UTF8. Also go to options and toggle and enable to header option and the limiter to ','
+11. Do the same for Cusotmers, Orders, DateDim and Products tables and run a sample query which should give you an output like below:
+![Image](Image)
+Now, we are ready to make a Power BI report
