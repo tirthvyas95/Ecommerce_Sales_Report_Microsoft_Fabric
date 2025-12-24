@@ -8,7 +8,8 @@ This is a full Case Study with a generic Ecommerce Sales Dataset in [Microsoft F
 4. Set up PostgreSQL
 5. Make a Power BI Desktop report in Import Mode
 6. Make a Power BI Desktop report in DirectQuery
-7. Install On-Premises Data Gateway and Set connect to Microsoft Fabric Platform
+7. Install On-Premises Data Gateway and Set up connection to Microsoft Fabric Platform
+8. Test the Connection
 ## Select a Dataset
 For this project we need a dataset that resembles a real world transactional database which Ecommerce apps use to manage their orders, customers and products. We have selected this [Dataset](https://www.kaggle.com/datasets/rohiteng/amazon-sales-dataset) from [Kaggle](https://www.kaggle.com/). Kaggle is a popular online platform and community for data science and machine learning, owned by Google, that hosts competitions, provides datasets, and fosters collaboration, allowing users to learn, practice, build skills, and solve real-world problems. Where, a certain [contributer](https://www.kaggle.com/rohiteng) has synthetically designed a database that looks and feels like a genuine database with records that resemble real-world users ordering certain products. For our porposes where we want to demonstrate how data from on-premises computers/servers/backends which power Ecommerce websites moves to Microsoft Fabric Platfrom, this dataset should suffice.
 Here the head of this dataset but before we use it in our case study we need to do some transformations with it:
@@ -218,5 +219,10 @@ Here is the Report in DirectQuery mode:
 You can publish the same report to Power BI service/Microsoft Fabric Environment and it will again create two file the semantic model and the report but pay attention to the size of the semantic model you can see it is siginificantly lower:
 ![Image](Image)
 An important point to note is that you need to make sure that to database is able to serve the queries in large amounts if you are planning to share the report with a large audiance, because every time the report is opened in the Power BI service the main data source is queried.
-## Install On-Premises Data Gateway and Set connect to Microsoft Fabric Platform
-The final piece of our puzzle is to set up our On-premises Data Gateway and connect it to Microsoft Fabric Platfrom
+## Install On-Premises Data Gateway and Set up connection to Microsoft Fabric Platform
+- The final piece of our puzzle is to set up our On-premises Data Gateway and connect it to Microsoft Fabric Platfrom. On-premises data gateway is a Microsoft Software that can be installed on the system that is hosting the database and it act as a bridge to provide quick and secure data transfer between local machine/system which is hosting the database service and Microsft Fabric Platform. - You can download the On-premises data gateway [here](https://docs.azure.cn/en-us/analysis-services/azure-analysis-services/analysis-services-gateway-install?tabs=azure-portal) and you can find more information [here](https://learn.microsoft.com/en-us/power-bi/connect-data/service-gateway-onprem) and [here](https://docs.azure.cn/en-us/analysis-services/azure-analysis-services/analysis-services-gateway-install?tabs=azure-portal) are the installation steps.
+- Some important points to note are, it is must that you remember the passkey for the gateway, you can specify if you have an existing cluster if you do not have one it will create one additionally you can restore a gateway to a system as well but there are seperate steps for that.
+- Since we are using PostgreSQL we will need to install a prerequisite the [Npgsql connector](https://learn.microsoft.com/en-us/power-query/connectors/postgresql#prerequisites), once you install this you can set up a dataflow by selecting the get data option in Power BI service.
+- Once you set this up, you can go to the settings of the data model and in the Gateway and cloud Connections, you should be able to see your gate way and cluster.
+- Try and refresh the model it should be working and finally we will add some rows in the database and see how the change is reflected in the Power BI service.
+## Test the Connection
