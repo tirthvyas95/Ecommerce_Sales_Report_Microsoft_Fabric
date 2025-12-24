@@ -162,7 +162,16 @@ Here is the python script that I used:
 ```
 ```
 You will have to run this script for three columns 'DateDim.date', 'DateDim.First Day of Month' and 'Orders.OrderDate'
+
 10. To import, right click on the table and select Import/Export data option which will pop up a window where toggle to Import mode, give the file path, .csv format, and encoding to UTF8. Also go to options and toggle and enable to header option and the limiter to ','
 11. Do the same for Cusotmers, Orders, DateDim and Products tables and run a sample query which should give you an output like below:
 ![Image](Image)
 Now, we are ready to make a Power BI report
+## Make a Power BI Desktop report in Import Mode
+- Lets open Power BI and go to get data where you can search for PostgreSQL and once select it will ask you for the server IP and the name of the database
+- Cick next and it should prompt you for the login credentials, enter in the one we made in PostgreSQL specifiaclly with just the permission to read the data. You can manage you credentials in data source settings File > Options and settings > Login Credintials > Data source settings
+- Once it is setup correctly the next windows will show you the tables and thier heads, select all 4 tables and click on load
+- Now make the relationships if Power BI has not picked up on them already, your model should look like this:
+![Image](Image)
+- Now lets add our measures, we are going to use simple measures as complex measures can not be converted to navtive queries in DirectQuery mode where [QueryFolding](https://learn.microsoft.com/en-us/power-query/query-folding-basics) takes place. Most of the Time Intelligence Funcitons are not available in DirectQuery mode for the same reason
+- Go to data model view and add this measures one by one, also a good practice is to make a seperate folder for all the measures:
