@@ -125,7 +125,8 @@ Month Number:
 ```
 Month Number = MONTH(DateDim[Date])
 ```
-Keep this in mind that most of time intelligence funcitons where this columns are used are not supported in DirectQuery mode so if you wish to make a report with time analysis, it is better to summarize the fact data first and then run the model in Import Mode.
+Keep this in mind that most of time intelligence functions where this columns are used are not supported in DirectQuery mode so if you wish to make a report with time analysis, it is better to summarize the fact data first and then running the model in Import Mode.
+
 14. Finally we need to make relationships, go to the model view, you can see there all the tables, now click and hold on the ProductID column in the Products table and drag the pointer and place it on the ProductID column in the Orders table, a new window will pop up showing the settings of the relationship, make sure that it is one to many and the filter propogation is one way.
 15. Do the same and link CustomerID in Customers tables to CustomerID in orders table, similarly link the Date in the Date Table to OrderDate in the Orders table. Now, your model should look like this:
 ![Image](image)
