@@ -41,17 +41,18 @@ For this project we are going to clean and transform using Power Query, addition
 An important point to note is that in this project we are transforming the dataset in PowerQuery and importing it inside PostgreSQL but in real world its usually the other way around but as we are trying to simulate a real world data pipeline we can do this, also this demonstrates Data Cleaning skills.
 ### Open Power BI
 Please follow the following steps:
-1. Click the get data option to connect to the .csv file that you will have downloaded from Kaggle and once you connect click transfrom data instead of the load option. This will start the PowerQuery window
-2. First of all on the right side of the window right click on the query(We refer to tables as Queries) and make a new group and name it as 'staging area'
-3. Now again right click and click the reference option, this will create a duplicate table with the reference to the original. PowerQuery notes each step/transformation done to the query and you can see it on the right side of the windows in applied steps
-4. Now, make a group for the referenced query and name it something else like 'model', this way if we make an error we will not need to reconnect to the data source(A good practice)
-5. Now, set the column proofing based on the entire dataset on the bottom left side of the window(Very important when cleaning the data)
-6. Go to view option and enable Column Distribution, Column Profile and Column Quality
+1. Click the get data option to connect to the .csv file that you will have downloaded from Kaggle and once you connect click transfrom data instead of the load option.
+2. This will start the PowerQuery window and the data model will be created in Import mode once you click save and apply after finishing your cleaning and transformation
+3. First of all on the right side of the window right click on the query(We refer to tables as Queries) and make a new group and name it as 'staging area'
+4. Now again right click and click the reference option, this will create a duplicate table with the reference to the original. PowerQuery notes each step/transformation done to the query and you can see it on the right side of the windows in applied steps
+5. Now, make a group for the referenced query and name it something else like 'model', this way if we make an error we will not need to reconnect to the data source(A good practice)
+6. Now, set the column proofing based on the entire dataset on the bottom left side of the window(Very important when cleaning the data)
+7. Go to view option and enable Column Distribution, Column Profile and Column Quality
     - Column Distribution: Evaluates data completeness and validity
     - Column Profile: Shows the frequency and spread of values
     - Column Quality:  Provides statistical summaries for a selected column
    This is everthing you will ever need for cleaing the dataset, if you have null values in a column you can either replace or remove by right clicking on the column, or if you encounter duplicates in a primary key column you can remove duplicates as well. You can watch the walkthrough video for more details
-7. Now, lets make our three tables: Orders, Customers and Products. First we will choose and select the columns for each of these tables:
+8. Now, lets make our three tables: Orders, Customers and Products. First we will choose and select the columns for each of these tables:
     - Orders(Fact):
         1. OrderDate
         2. Quantity
@@ -78,11 +79,11 @@ Please follow the following steps:
         4. UnitPrice
         5. ProductID(Primary Key)
 Our Model will follow a Star Schema where the Dimension tables Connect to the Fact tables, this is the most efficient way to store and query the tables, note that in real world a Data Engineer will already have bifurcated the tables like this to save and optimise the database but here we are doing this on PowerQuery. Also the CustomerID, ProductID act as Foreign Key in the Orders table and they act as primary key in thier subsequent tables.
-8. Start by referencing the query in the model group and name it Customer, select the CustomerID column and remove duplicates and now each distinct customer should rest in the table, and finally remove the other unnecessary columns.
-9. Similarly, make a reference of the main query in the model group and name it products, here select he ProductsID table and remove duplicates and followed by removing the unnecessary columns.
-10. Finally, in the main query in the model group rename it as Orders and remove the columns that are going to be in the dimension tables except the CustomerID and ProductID
-11. To end this stage, right click on each query and select which to enable load or not, where disable the option for the query in staging area. Press save and close
-12. Now, lets make a date table, go to the model view and press the make a new table on the top, enter this DAX in the field:
+9. Start by referencing the query in the model group and name it Customer, select the CustomerID column and remove duplicates and now each distinct customer should rest in the table, and finally remove the other unnecessary columns.
+10. Similarly, make a reference of the main query in the model group and name it products, here select he ProductsID table and remove duplicates and followed by removing the unnecessary columns.
+11. Finally, in the main query in the model group rename it as Orders and remove the columns that are going to be in the dimension tables except the CustomerID and ProductID
+12. To end this stage, right click on each query and select which to enable load or not, where disable the option for the query in staging area. Press save and close
+13. Now, lets make a date table, go to the model view and press the make a new table on the top, enter this DAX in the field:
 ```
 DateDim = CALENDARAUTO()
 ```
@@ -129,4 +130,16 @@ Keep this in mind that most of time intelligence funcitons where this columns ar
 15. Do the same and link CustomerID in Customers tables to CustomerID in orders table, similarly link the Date in the Date Table to OrderDate in the Orders table. Now, your model should look like this:
 ![Image](image)
 ## Export to .csv using DAX Studio
-To export to .csv we are going to use DAX studio, which is 
+To export to .csv we are going to use DAX studio, which can be launched straight from Power BI from the External Tools option. Dax studio is a free open-source tool for Power BI, Excel Power Pivot, and Analysis Services, used for writing, executing, and analysing complex Data Analysis Expressions (DAX) Queries, debugging measures, and optimizing data models and providing a powerful environment for learning and mastering DAX.
+
+Please follow the following steps:
+1. You can download DAX Studio from here: [DAX Studio](https://daxstudio.org/)
+2. You can open it from the External Tools option which also sends connection details of the model to DAX studio where you can queries which directly queires the VertiPaq engine that compresses and store the model in Power BI
+3. Once the DAX studio is open you can see all your tables on the left side and on the center you can write and execute the DAX
+4. Go to Advanced option and click on the Export Data, select CSV Files
+5. Set the Output Path, Delimiter as Comma, and the file encoding as UTF-8
+6. Check all the tables and click export, now you should have 4 exported tables: Orders.csv, Customers.csv, Products.csv, and DateDim.csv
+
+Now, we are going to set this data up in PostgreSQL to simulate the real world data flow.
+## Set up PostgreSQL
+
