@@ -8,10 +8,7 @@ This is a full Case Study with a generic Ecommerce Sales Dataset in [Microsoft F
 4. Set up PostgreSQL
 5. Make a Power BI Desktop report in Import Mode
 6. Make a Power BI Desktop report in DirectQuery
-7. Set up a Microsoft Fabric Workspace
-8. Install On-Premises Data Gateway and Set connect to Microsoft Fabric Platform
-9. Publish the Reports
-10. Security Tips
+7. Install On-Premises Data Gateway and Set connect to Microsoft Fabric Platform
 ## Select a Dataset
 For this project we need a dataset that resembles a real world transactional database which Ecommerce apps use to manage their orders, customers and products. We have selected this [Dataset](https://www.kaggle.com/datasets/rohiteng/amazon-sales-dataset) from [Kaggle](https://www.kaggle.com/). Kaggle is a popular online platform and community for data science and machine learning, owned by Google, that hosts competitions, provides datasets, and fosters collaboration, allowing users to learn, practice, build skills, and solve real-world problems. Where, a certain [contributer](https://www.kaggle.com/rohiteng) has synthetically designed a database that looks and feels like a genuine database with records that resemble real-world users ordering certain products. For our porposes where we want to demonstrate how data from on-premises computers/servers/backends which power Ecommerce websites moves to Microsoft Fabric Platfrom, this dataset should suffice.
 Here the head of this dataset but before we use it in our case study we need to do some transformations with it:
@@ -175,3 +172,43 @@ Now, we are ready to make a Power BI report
 ![Image](Image)
 - Now lets add our measures, we are going to use simple measures as complex measures can not be converted to navtive queries in DirectQuery mode where [QueryFolding](https://learn.microsoft.com/en-us/power-query/query-folding-basics) takes place. Most of the Time Intelligence Funcitons are not available in DirectQuery mode for the same reason
 - Go to data model view and add this measures one by one, also a good practice is to make a seperate folder for all the measures:
+Average Discount:
+```
+Average Discount = AVERAGE(Orders[Discount])
+```
+Number of Orders Placed:
+```
+Number of Orders Placed = COUNTROWS(Orders)
+```
+Total Product Moved:
+```
+Total Product Moved = SUM(Products[UnitPrice])
+```
+Total Revenue:
+```
+Total Revenue = SUM(Orders[TotalAmount])
+```
+Total Units Sold:
+```
+Total Units Sold = SUM(Orders[Quantity])
+```
+Gross Sales:
+```
+Gross Sales = [Total Product Moved] * [Total Units Sold]
+```
+Revenue Lost Due to Discounts:
+```
+Revenue Lost Due to Discounts = [Gross Sales] * [Average Discount]
+```
+- We also need to make a select measure where the user can select this measure on which all the values in the visualization will be calculated for this report we will you three measures: Total Revenue, Total Units Sold and Number of Orders Placed
+- To make this go to the model view and click New Parameter in Home where select fields and name the measure for my case I did Select Measure, now from the Orders table add these three measures mentioned above
+- This will enable us to just put this in the values section of the visualization and it will change according to the selected measure
+- Now, you can add visualizations and make your report look something like this:
+![Image](Image)
+- Finally, publish to report to the choice of your workspace which will create a report file and a semantic model file in the workspace where other users can open the report and use the semantic model in their own reports
+Now lets make the same report in DirectQuery mode
+## Make a Power BI Desktop report in DirectQuery
+Most of the steps that we did in the previous report are similar here but with some changes :
+- Open Power BI Desktop and go to get data option and search for PostgreSQL, now when it asks you for the ip of the server enable the radio button beside the DirectQuery mode and load all the tables
+- In this case the relationships will not be made automatically as Power BI does not load any data in the model in DirectQuery so it does not have any data to check. Instead, you will have to make the relationships by yourself like follows:
+![Image](Image)
