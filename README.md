@@ -212,3 +212,11 @@ Most of the steps that we did in the previous report are similar here but with s
 - Open Power BI Desktop and go to get data option and search for PostgreSQL, now when it asks you for the ip of the server enable the radio button beside the DirectQuery mode and load all the tables
 - In this case the relationships will not be made automatically as Power BI does not load any data in the model in DirectQuery so it does not have any data to check. Instead, you will have to make the relationships by yourself like follows:
 ![Image](Image)
+- Now, you can add all the measure and make visualizations like just before but the important point to note is that no data has been imported in the model every time you open Power BI or change the select measure or even interact with the visualization the main source which is in our case PostgreSQL is queried be it with some caching ofcourse.
+Here is the Report in DirectQuery mode:
+![Image](Image)
+You can publish the same report to Power BI service/Microsoft Fabric Environment and it will again create two file the semantic model and the report but pay attention to the size of the semantic model you can see it is siginificantly lower:
+![Image](Image)
+An important point to note is that you need to make sure that to database is able to serve the queries in large amounts if you are planning to share the report with a large audiance, because every time the report is opened in the Power BI service the main data source is queried.
+## Install On-Premises Data Gateway and Set connect to Microsoft Fabric Platform
+The final piece of our puzzle is to set up our On-premises Data Gateway and connect it to Microsoft Fabric Platfrom
