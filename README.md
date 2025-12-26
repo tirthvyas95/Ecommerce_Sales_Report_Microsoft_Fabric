@@ -1,7 +1,7 @@
 # Ecommerce_Sales_Report_Microsoft_Fabric
 ![Main Page](https://github.com/tirthvyas95/Ecommerce_Sales_Report_Microsoft_Fabric/blob/cda7ea46ae1dcd814c554691f8d8b9fa15191849/Screenshots/SS_1.png)
 ## Introduction
-This is a full Case Study with a generic Ecommerce Sales Dataset in [Microsoft Fabric](https://www.microsoft.com/en-us/microsoft-fabric) with Report from [Power BI Desktop](https://www.microsoft.com/en-us/power-platform/products/power-bi/desktop) and Integration with [PostgreSQL](https://www.postgresql.org/) by using [Microsoft On-Premises Data Gateway](https://learn.microsoft.com/en-us/power-bi/connect-data/service-gateway-onprem) along with special tips for data cleaning in [Power Query](https://learn.microsoft.com/en-us/power-query/power-query-what-is-power-query). The goal of this project is to demonstrate how one could make a relational database, connect it with power tools analysis tools such as Power BI Desktop and share it on Microsoft Fabric Platform where any stake holder can access it from any corner of the world, and finally connecting the resource in Microsoft Fabric to the same on-premises database for real-time analysis where the interactive visuals in the resource or report on Power Bi service can query directly the data source. Following is the workflow with the steps that we are going to follow as we have a lot of things that need to be done:
+This is a full Case Study with a generic Ecommerce Sales Dataset in [Microsoft Fabric](https://www.microsoft.com/en-us/microsoft-fabric) with Report from [Power BI Desktop](https://www.microsoft.com/en-us/power-platform/products/power-bi/desktop) and Integration with [PostgreSQL](https://www.postgresql.org/) by using [Microsoft On-Premises Data Gateway](https://learn.microsoft.com/en-us/power-bi/connect-data/service-gateway-onprem) along with special tips for data cleaning in [Power Query](https://learn.microsoft.com/en-us/power-query/power-query-what-is-power-query). The goal of this project is to demonstrate how one could make a relational database, connect it with powerful analysis tools such as Power BI Desktop and share it on Microsoft Fabric Platform where any stake holder can access it from any corner of the world, and finally connecting the same resource in Microsoft Fabric to the on-premises database on local machine for real-time analysis where the interactive visuals in the resource or report on Power Bi service can query directly the data source. Following is the workflow with the steps that we are going to follow as we have a lot of things that need to be done:
 1. Select a Dataset
 2. Clean and Transform Using Power Query
 3. Export to .csv using DAX Studio
@@ -309,9 +309,9 @@ Here are the results:
 
 **Thus we have demonstrated that our database installed in the local machine is succesfully being queried by the Report on Power BI Service**
 ##References
-1. Data Tutorials, Data Tutorials's Youtube Channel. Retrieved December 26, 2025, from https://www.youtube.com/@datatutorials1
-2. Microsoft Learn, Microsoft Learn's Data Analyst Career Path. Retrieved December 26, 2025, from https://learn.microsoft.com/en-us/training/career-paths/data-analyst
-3. techFAQ, techFAQ's Youtube Channel. Retieved December 26, 2025, from https://www.youtube.com/watch?v=M2NzvnfS-hI
+1. Microsoft Learn, Microsoft Learn's Data Analyst Career Path. Retrieved December 26, 2025, from https://learn.microsoft.com/en-us/training/career-paths/data-analyst
+2. techFAQ, techFAQ's Youtube Channel, Retieved December 26, 2025, from https://www.youtube.com/watch?v=M2NzvnfS-hI
+3. SQLBI, SQLBI's Youtube Channel, Retrieved December 26, 2025. from https://www.youtube.com/watch?v=gZ4JcqFwJfg&list=PLU6II7MW-aiJ3Z-wbUQ0tkqSbAkyiB3uy
 ## Tools used
 1. [Microsoft Azure](https://azure.microsoft.com/en-in)
 2. [Microsoft Fabric](https://www.microsoft.com/en-us/microsoft-fabric)
