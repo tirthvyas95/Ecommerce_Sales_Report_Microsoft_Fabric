@@ -309,8 +309,8 @@ Here are the results:
 
 **Thus we have demonstrated that our database installed in the local machine is succesfully being queried by the Report on Power BI Service**
 ##References
-1. Data Tutorials, Data Tutorials's Youtube Channel. Retrieved Retieved December 26, 2025, from https://www.youtube.com/@datatutorials1
-2. Microsoft Learn, Microsoft Learn's Data Analyst Career Path. Retieved December 26, 2025, from https://learn.microsoft.com/en-us/training/career-paths/data-analyst
+1. Data Tutorials, Data Tutorials's Youtube Channel. Retrieved December 26, 2025, from https://www.youtube.com/@datatutorials1
+2. Microsoft Learn, Microsoft Learn's Data Analyst Career Path. Retrieved December 26, 2025, from https://learn.microsoft.com/en-us/training/career-paths/data-analyst
 3. techFAQ, techFAQ's Youtube Channel. Retieved December 26, 2025, from https://www.youtube.com/watch?v=M2NzvnfS-hI
 ## Tools used
 1. [Microsoft Azure](https://azure.microsoft.com/en-in)
