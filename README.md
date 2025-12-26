@@ -159,7 +159,10 @@ To do this we are going to use a small python script, I am sure you can do the s
 Here is the python script that I used:
 ```
 ```
-You will have to run this script for three columns 'DateDim.date', 'DateDim.First Day of Month' and 'Orders.OrderDate'
+You will have to run this script for three columns 'DateDim.date', 'DateDim.First Day of Month' and 'Orders.OrderDate', also you will need pandas for this, this is how I installed it in Anaconda(More on it in the Test section).
+```
+conda install pandas
+```
 
 10. To import, right click on the table and select Import/Export data option which will pop up a window where toggle to Import mode, give the file path, .csv format, and encoding to UTF8. Also go to options and toggle and enable to header option and the limiter to ','
 11. Do the same for Cusotmers, Orders, DateDim and Products tables and run a sample query which should give you an output like below:
@@ -227,4 +230,96 @@ An important point to note is that you need to make sure that to database is abl
 - Try and refresh the model it should be working and finally we will add some rows in the database and see how the change is reflected in the Power BI service.
 ## Test the Connection
 We will test this connection using psycopg2 adapter which is the most widely used PostgreSQL adapter for python. Essentially we will make a script that will communicate with our database and make changes and we will check how the changes reflect in our Report in Microsoft Fabric. This should effectively simulate a Python Backend of a certain application communicating with PostgreSQL to store and we as a Data Analyst we have accessed the same database and build different pipeline that feeds us the most recent data from the database. Also, PostgreSQL is very good at handeling this kind of workloads because of this ACID model and Parallel Query Execution feature.
-We will run our Python interpreter in seperate [Anaconda](https://www.anaconda.com/) environment by installing python, psycopg2 and pandas. We will install this library with Anaconda's own package manager called ['conda'](https://anaconda.org/anaconda/conda)
+We will run our Python interpreter in seperate [Anaconda](https://www.anaconda.com/) environment by installing python, psycopg2. We will install this library with Anaconda's own package manager called ['conda'](https://anaconda.org/anaconda/conda) along with creating a seperate environment for out test.
+For creating an environment:
+```
+conda create -- name  test
+```
+For activating the environment:
+```
+conda activate test
+```
+For installing python:
+```
+conda install python
+```
+For installing psycopg2:
+```
+conda install psycopg2
+```
+Now lets take a look at the python script that we are going to use:
+In this script there are 3 options: 
+1. You can in insert a row in Orders table with OrderID = 100001 along with some test data in others columns
+2. You can in insert another row in Orders table with OrderID = 100002 similarly
+3. You can delete every row after OrderID = 100000
+We will try and insert a row in Orders table so see how changed reflect in the Dashboard with DirectQuery
+```
+import psycopg2
+
+hostname = 'localhost'
+database = 'Test'
+username = 'PyApp'
+pwd = 'Test@123'
+port_id = 5432
+conn = None
+
+try:
+    with psycopg2.connect(
+            host =  hostname,
+            dbname = database,
+            user = username,
+            password = pwd,
+            port = port_id) as conn:
+                with conn.cursor() as cur:                
+                        case = int(input("1 - Insert \n2 - Insert Another\n0 - DELETE\n"))
+                        if case == 1:
+                            cur.execute("""
+                                            INSERT INTO public."Orders"(
+                                                "OrderDate", "Quantity", "Discount", "Tax", "ShippingCost", "TotalAmount", "PaymentMethod", "OrderStatus", "OrderID", "CustomerID", "ProductID", "SellerID")
+                                            VALUES ('2024-12-30', 2, 0.15, 77.88, 9.31, 1060.73, 'Debit Card', 'Delivered', 100001, 9034, 41, 1273);
+                                        """
+                        )
+                        if case == 2:
+                            cur.execute("""
+                                            INSERT INTO public."Orders"(
+                                                "OrderDate", "Quantity", "Discount", "Tax", "ShippingCost", "TotalAmount", "PaymentMethod", "OrderStatus", "OrderID", "CustomerID", "ProductID", "SellerID")
+                                            VALUES ('2024-12-31', 2, 0.15, 77.88, 9.31, 1060.73, 'Debit Card', 'Delivered', 100002, 9034, 41, 1273);
+                                        """
+                        )
+                        if case == 0:
+                            cur.execute("""
+                                            DELETE FROM public."Orders" as po
+                                            WHERE po."OrderID" > 100000;
+                                        """
+                        )
+                        print("Done")
+
+except Exception as error:
+    print(error)
+finally:
+    if conn is not None:
+        conn.close()
+```
+Here are the results:
+1. With inserted OrderID = 1000001
+![Image](Image)
+2. With inserted OrderID = 1000002
+![Image](Image)
+3. Removing everything after OrderID = 100000
+
+**Thus we have demonstrated that our database installed in the local machine is succesfully being queried by the Report on Power BI Service**
+##References
+1. Data Tutorials, Data Tutorials's Youtube Channel. Retrieved Retieved December 26, 2025, from https://www.youtube.com/@datatutorials1
+2. Microsoft Learn, Microsoft Learn's Data Analyst Career Path. Retieved December 26, 2025, from https://learn.microsoft.com/en-us/training/career-paths/data-analyst
+3. techFAQ, techFAQ's Youtube Channel. Retieved December 26, 2025, from https://www.youtube.com/watch?v=M2NzvnfS-hI
+## Tools used
+1. [Microsoft Azure](https://azure.microsoft.com/en-in)
+2. [Microsoft Fabric](https://www.microsoft.com/en-us/microsoft-fabric)
+3. [PostgreSQL](https://www.postgresql.org/)
+4. [Python](https://www.python.org/)
+5. [Anaconda](https://www.anaconda.com/)
+6. [Psycopg2](https://pypi.org/project/psycopg2/)
+7. [Github](https://github.com/)
+8. [Kaggle](https://www.kaggle.com/)
+9. [Microsoft Power BI](https://www.microsoft.com/en-us/power-platform/products/power-bi)
+10. [DAX STUDIO](https://daxstudio.org/)
