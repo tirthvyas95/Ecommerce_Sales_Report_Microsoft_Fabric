@@ -1,7 +1,11 @@
 # Ecommerce_Sales_Report_Microsoft_Fabric
 ![Main Page](https://github.com/tirthvyas95/Ecommerce_Sales_Report_Microsoft_Fabric/blob/cda7ea46ae1dcd814c554691f8d8b9fa15191849/Screenshots/SS_1.png)
 ## Introduction
-This is a full Case Study with a generic Ecommerce Sales Dataset in [Microsoft Fabric](https://www.microsoft.com/en-us/microsoft-fabric) with Report from [Power BI Desktop](https://www.microsoft.com/en-us/power-platform/products/power-bi/desktop) and Integration with [PostgreSQL](https://www.postgresql.org/) by using [Microsoft On-Premises Data Gateway](https://learn.microsoft.com/en-us/power-bi/connect-data/service-gateway-onprem) along with special tips for data cleaning in [Power Query](https://learn.microsoft.com/en-us/power-query/power-query-what-is-power-query). The goal of this project is to demonstrate how one could make a relational database, connect it with powerful analysis tools such as Power BI Desktop and share it on Microsoft Fabric Platform where any stake holder can access it from any corner of the world, and finally connecting the same resource in Microsoft Fabric to the on-premises database on local machine for real-time analysis where the interactive visuals in the resource or report on Power Bi service can query directly the data source. Following is the workflow with the steps that we are going to follow as we have a lot of things that need to be done:
+This is a full Case Study with a generic Ecommerce Sales Dataset in [Microsoft Fabric](https://www.microsoft.com/en-us/microsoft-fabric) with Report from [Power BI Desktop](https://www.microsoft.com/en-us/power-platform/products/power-bi/desktop) and Integration with [PostgreSQL](https://www.postgresql.org/) by using [Microsoft On-Premises Data Gateway](https://learn.microsoft.com/en-us/power-bi/connect-data/service-gateway-onprem) along with special tips for data cleaning in [Power Query](https://learn.microsoft.com/en-us/power-query/power-query-what-is-power-query). 
+
+The goal of this project is to demonstrate how one could make a relational database, connect it with powerful analysis tools such as Power BI Desktop and share it on Microsoft Fabric Platform where any stake holder can access it from any corner of the world, and finally connecting the same resource in Microsoft Fabric to the on-premises database on local machine for real-time analysis where the interactive visuals in the resource or report on Power Bi service can query directly the data source. 
+
+Following is the workflow with the steps that we are going to follow as we have a lot of things that need to be done:
 1. Select a Dataset
 2. Clean and Transform Using Power Query
 3. Export to .csv using DAX Studio
@@ -11,11 +15,14 @@ This is a full Case Study with a generic Ecommerce Sales Dataset in [Microsoft F
 7. Install On-Premises Data Gateway and Set up connection to Microsoft Fabric Platform
 8. Test the Connection
 ## Select a Dataset
-For this project we need a dataset that resembles a real world transactional database which Ecommerce apps use to manage their orders, customers and products. We have selected this [Dataset](https://www.kaggle.com/datasets/rohiteng/amazon-sales-dataset) from [Kaggle](https://www.kaggle.com/). Kaggle is a popular online platform and community for data science and machine learning, owned by Google, that hosts competitions, provides datasets, and fosters collaboration, allowing users to learn, practice, build skills, and solve real-world problems. Where, a certain [contributer](https://www.kaggle.com/rohiteng) has synthetically designed a database that looks and feels like a genuine database with records that resemble real-world users ordering certain products. For our porposes where we want to demonstrate how data from on-premises computers/servers/backends which power Ecommerce websites moves to Microsoft Fabric Platfrom, this dataset should suffice.
+For this project we need a dataset that resembles a real world transactional database which Ecommerce apps use to manage their orders, customers and products. We have selected this [Dataset](https://www.kaggle.com/datasets/rohiteng/amazon-sales-dataset) from [Kaggle](https://www.kaggle.com/). Kaggle is a popular online platform and community for data science and machine learning, owned by Google, that hosts competitions, provides datasets, and fosters collaboration, allowing users to learn, practice, build skills, and solve real-world problems. Where, a certain [contributer](https://www.kaggle.com/rohiteng) has synthetically designed a database that looks and feels like a genuine database with records that resemble real-world where users ordering certain products. For our porposes where we want to demonstrate how data from on-premises computers/servers/backends which power Ecommerce websites moves to Microsoft Fabric Platfrom, this dataset should suffice.
+
 Here the head of this dataset but before we use it in our case study we need to do some transformations with it:
-![Image](Image)
+![Image](https://github.com/tirthvyas95/Ecommerce_Sales_Report_Microsoft_Fabric/blob/eb4ef8a59c441ba75e8d293d91f919583921d3d3/Screenshots/SS_8.png)
 ## Clean and Transform using Power Query
-For this project we are going to clean and transform using Power Query, additionally we will need to make a Date Table or Date Dimention for our model in order to use the time intelligence funcitons. Although, most of them are not available for DirectQuery as this complex funcitons are diffcult to convert into native source queries using QueryFolding, but I will show you are this fucntions can provide very useful insights. First of all download the dataset from Kaggle and open up Power BI and save the Report file first before begining(Good Practice). Here is the metadata of the dataset when you download it from Kaggle:
+For this project we are going to clean and transform using Power Query, additionally we will need to make a Date Table or Date Dimention for our model in order to use the time intelligence funcitons. Although, most of them are not available for DirectQuery as this complex funcitons are diffcult to convert into native source queries using QueryFolding, but I will show you even with these fucntions we can furnish very useful insights. First of all download the dataset from Kaggle and open up Power BI and save the Report file first before begining(Good Practice). 
+
+Here is the metadata of the dataset when you download it from Kaggle:
 1. OrderID: Unique Identification number for each record
 2. OrderDate: Date on which the order was created
 3. CutomerID: Unique Identification number for each customer
@@ -42,14 +49,45 @@ Please follow the following steps:
 1. Click the get data option to connect to the .csv file that you will have downloaded from Kaggle and once you connect click transfrom data instead of the load option.
 2. This will start the PowerQuery window and the data model will be created in Import mode once you click save and apply after finishing your cleaning and transformation
 3. First of all on the right side of the window right click on the query(We refer to tables as Queries) and make a new group and name it as 'staging area'
-4. Now again right click and click the reference option, this will create a duplicate table with the reference to the original. PowerQuery notes each step/transformation done to the query and you can see it on the right side of the windows in applied steps
+4. Now again right click and click the reference option, this will create a duplicate table with the reference to the original. PowerQuery notes each step/transformation done to the query and you can see it on the right side of the window in applied steps
 5. Now, make a group for the referenced query and name it something else like 'model', this way if we make an error we will not need to reconnect to the data source(A good practice)
 6. Now, set the column proofing based on the entire dataset on the bottom left side of the window(Very important when cleaning the data)
 7. Go to view option and enable Column Distribution, Column Profile and Column Quality
     - Column Distribution: Evaluates data completeness and validity
     - Column Profile: Shows the frequency and spread of values
     - Column Quality:  Provides statistical summaries for a selected column
-   This is everthing you will ever need for cleaing the dataset, if you have null values in a column you can either replace or remove by right clicking on the column, or if you encounter duplicates in a primary key column you can remove duplicates as well. You can watch the walkthrough video for more details
+
+This is everthing you will ever need for cleaing the dataset, if you have null values in a column you can either replace or remove by right clicking on the column, or if you encounter duplicates in a primary key column you can remove duplicates as well. You can watch the walkthrough video for more details.
+
+Also for the columns OrderID, CustomerID, ProductID and SellerID have values like ORD000123, CUST001504, P00123, and SELL01234 subsequently. We never want to save data like this, there are a couple funcamental problems with storing data like this:
+- We will have to save these columns as string/array of characters of varchar, this consumes more space
+- By naming primary keys as ABC### you can limiting your range, for example you cannot exceed ABC999
+- Moreover, VertiPaq engine which is responsable for storing and compressing data in PowerBI import models performs better with numeric values. That means we can save a lot of space by just changing to one of the numeric data-types
+
+Finally, the reason why we are dividing the dataset into multiple tables is because here also we have an opportunity to reduce the model size, for example in this database there are only 50 products but these products have been ordered over and over again 100000 times which means that details which are same for each product for example attributes of ProductID = 10: Name, Brand, Category and UnitPrice have been repeated each time customer has ordered. While, we only need one identification for each product so we will make a product dimention table.
+
+For instance,
+```
+ProductID = 7 is ordered 2034 times, so each time someone orders PorductID = 7:
+    => ProductName = Dress Shirt, Category = Clothing, Brand = UrbanStyle, ProductID = 7, UnitPrice = 219.81
+        => (Values from other columns + 2038*5) values are saved in the Model for that product
+```
+While, if we have a products dimention table:
+```
+ProductID = 7 is ordered 2034 times, so each time someone orders ProductID = 7:
+    => ProductName = Dress Shirt, Category = Clothing, Brand = UrbanStyle, ProductID = 7 saved once in Products table && ProductID saved 2038 times in Orders table
+        => (Values from other columns + 2038 times ProductID in Orders + 1*5 values in Products) values aare saved in the Model for that product
+```
+The Second option is more optimised and storage efficient, this is like indexing, like makeing a dictionary. If you can expecting your model/dataset to grow substantially in the future then these types of measures are necessary.
+
+We will need to run a command in [M language](https://learn.microsoft.com/en-us/powerquery-m/) which will select and keep only numeric characters and later we will convert the column data-type to Numeric/Decimal.
+
+Click add-column/custom-column and enter this command by substituing your column in [Target Column]:
+```
+Text.Select([Target Column], {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9"})
+```
+This will create a custom column with just the numbers, change the data type of this column to Decimal, remove the old ID column, and rename this column with that same name. You can check this transformation in Power Query in 'E-Commerce Sales Data Report.pbix' file in the Applied Steps section in PowerQuery.
+
 8. Now, lets make our three tables: Orders, Customers and Products. First we will choose and select the columns for each of these tables:
     - Orders(Fact):
         1. OrderDate
@@ -77,6 +115,7 @@ Please follow the following steps:
         4. UnitPrice
         5. ProductID(Primary Key)
 Our Model will follow a Star Schema where the Dimension tables Connect to the Fact tables, this is the most efficient way to store and query the tables, note that in real world a Data Engineer will already have bifurcated the tables like this to save and optimise the database but here we are doing this on PowerQuery. Also the CustomerID, ProductID act as Foreign Key in the Orders table and they act as primary key in thier subsequent tables.
+
 9. Start by referencing the query in the model group and name it Customer, select the CustomerID column and remove duplicates and now each distinct customer should rest in the table, and finally remove the other unnecessary columns.
 10. Similarly, make a reference of the main query in the model group and name it products, here select he ProductsID table and remove duplicates and followed by removing the unnecessary columns.
 11. Finally, in the main query in the model group rename it as Orders and remove the columns that are going to be in the dimension tables except the CustomerID and ProductID
@@ -86,6 +125,7 @@ Our Model will follow a Star Schema where the Dimension tables Connect to the Fa
 DateDim = CALENDARAUTO()
 ```
 CALENDATAUTO() function automatically scans your tables and makes a data table by taking minimum date and macimum date, although you can specify them explicitly but for our purposes this should suffice
+
 13. Now, we will add all the columns that we will every need in the data table, add columns and for each column add the following DAXs:
 Day of Week:
 ```
@@ -123,11 +163,11 @@ Month Number:
 ```
 Month Number = MONTH(DateDim[Date])
 ```
-Keep this in mind that most of time intelligence functions where this columns are used are not supported in DirectQuery mode so if you wish to make a report with time analysis, it is better to summarize the fact data first and then running the model in Import Mode.
+Keep this in mind that most of time-intelligence functions where this columns are used are not supported in DirectQuery mode so if you wish to make a report with time analysis, it is better to summarize the fact data first and then running the model in Import Mode.
 
 14. Finally we need to make relationships, go to the model view, you can see there all the tables, now click and hold on the ProductID column in the Products table and drag the pointer and place it on the ProductID column in the Orders table, a new window will pop up showing the settings of the relationship, make sure that it is one to many and the filter propogation is one way.
 15. Do the same and link CustomerID in Customers tables to CustomerID in orders table, similarly link the Date in the Date Table to OrderDate in the Orders table. Now, your model should look like this:
-![Image](image)
+![Image](https://github.com/tirthvyas95/Ecommerce_Sales_Report_Microsoft_Fabric/blob/eb4ef8a59c441ba75e8d293d91f919583921d3d3/Screenshots/SS_4.png)
 ## Export to .csv using DAX Studio
 To export to .csv we are going to use DAX studio, which can be launched straight from Power BI from the External Tools option. Dax studio is a free open-source tool for Power BI, Excel Power Pivot, and Analysis Services, used for writing, executing, and analysing complex Data Analysis Expressions (DAX) Queries, debugging measures, and optimizing data models and providing a powerful environment for learning and mastering DAX.
 
@@ -139,15 +179,18 @@ Please follow the following steps:
 5. Set the Output Path, Delimiter as Comma, and the file encoding as UTF-8
 6. Check all the tables and click export, now you should have 4 exported tables: Orders.csv, Customers.csv, Products.csv, and DateDim.csv
 
+Here is how it should look:
+![Image](https://github.com/tirthvyas95/Ecommerce_Sales_Report_Microsoft_Fabric/blob/a2a0de665e0bc06aa236b0ef499eaf8c89c9a7ba/Screenshots/SS_9.png)
+
 Now, we are going to set this data up in PostgreSQL to simulate the real world data flow.
 ## Set up PostgreSQL
-The reason we are using the PostgreSQL is beacuse it is free to use and it is open source, along with the fact that it also supports DirectQuery in Power BI. You check the data supported data sources here. To set up PostgreSQL follow this steps:
+The reason we are using the PostgreSQL is beacuse it is free to use and it is open source, along with the fact that it also supports DirectQuery in Power BI. You can check the supported data sources here. To set up PostgreSQL follow this steps:
 1. Download and install the PostgreSQL from here, make sure to remember when you enter the admin credentials when you are prompted
 2. Open the pgadmin 4 and make a new database I named it test
 3. Make a new login which can be used in Power BI and On-premises data gateway, make sure to assign the role pg_read_all_data
 4. Go to Server > test > Schema > Tables, right click on tables and create a new table, we will need to make 4 tables like belows, make sure to use the same datatypes
 5. For the Customers use the following settings:
-![Image](Image)
+![Image](https://github.com/tirthvyas95/Ecommerce_Sales_Report_Microsoft_Fabric/blob/7d6a0bc88b6c58b09af4f0cf7501a4e69c9f6869/Screenshots/SS_10.png)
 6. For the Products table use the following settings:
 ![Image](Image)
 7. For the Orders table use the following settings:
