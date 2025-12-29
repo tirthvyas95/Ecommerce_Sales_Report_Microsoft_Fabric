@@ -114,6 +114,7 @@ This will create a custom column with just the numbers, change the data type of 
         3. Brand
         4. UnitPrice
         5. ProductID(Primary Key)
+
 Our Model will follow a Star Schema where the Dimension tables Connect to the Fact tables, this is the most efficient way to store and query the tables, note that in real world a Data Engineer will already have bifurcated the tables like this to save and optimise the database but here we are doing this on PowerQuery. Also the CustomerID, ProductID act as Foreign Key in the Orders table and they act as primary key in thier subsequent tables.
 
 9. Start by referencing the query in the model group and name it Customer, select the CustomerID column and remove duplicates and now each distinct customer should rest in the table, and finally remove the other unnecessary columns.
@@ -192,11 +193,11 @@ The reason we are using the PostgreSQL is beacuse it is free to use and it is op
 5. For the Customers use the following settings:
 ![Image](https://github.com/tirthvyas95/Ecommerce_Sales_Report_Microsoft_Fabric/blob/7d6a0bc88b6c58b09af4f0cf7501a4e69c9f6869/Screenshots/SS_10.png)
 6. For the Products table use the following settings:
-![Image](Image)
+![Image](https://github.com/tirthvyas95/Ecommerce_Sales_Report_Microsoft_Fabric/blob/a6f335d9444f68ff77aac696271853a770ece4d8/Screenshots/SS_11.png)
 7. For the Orders table use the following settings:
-![Image](Image)
+![Image](https://github.com/tirthvyas95/Ecommerce_Sales_Report_Microsoft_Fabric/blob/a6f335d9444f68ff77aac696271853a770ece4d8/Screenshots/SS_12.png)
 8. For the DateDim table use the following settings:
-![Image](Image)
+![Image](https://github.com/tirthvyas95/Ecommerce_Sales_Report_Microsoft_Fabric/blob/a6f335d9444f68ff77aac696271853a770ece4d8/Screenshots/SS_13.png)
 9. Before we start importing data to this server we need to a transformation in the .csv files. The dates in the columns came out in the .csv files like "YYYY-MM-DD ##:##:##.###" but we need "YYYY-MM-DD" as set up in the schema
 To do this we are going to use a small python script, I am sure you can do the same in Power BI but as long as we reach our goals the questions about which tools we use are inconsequential.
 Here is the python script that I used:
