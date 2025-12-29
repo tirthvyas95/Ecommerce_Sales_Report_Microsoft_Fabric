@@ -241,6 +241,14 @@ conda install pandas
 10. To import, right click on the table and select Import/Export data option which will pop up a window where toggle to Import mode, give the file path, .csv format, and encoding to UTF8. Also go to options and toggle and enable to header option and the limiter to ','
 11. Do the same for Cusotmers, Orders, DateDim and Products tables and run a sample query which should give you an output like below:
 ![Image](https://github.com/tirthvyas95/Ecommerce_Sales_Report_Microsoft_Fabric/blob/a9f26e820af62b93b35cbbc19faaa790aa06441d/Screenshots/SS_14.png)
+12. One final thing that we need to do is that we need to create a Login that can be used by the Python script for connecting and manipulating the database. You can create a login by right clicking and select the create on Login/Groups Roles, then enter a name in my case it was PyApp, not the next tab enter password, in the membership tab you can assign permission or make the login a part of a group, for our purpose I added pg_write_all_data and pg_read_all_data for this login like this:
+![Image](https://github.com/tirthvyas95/Ecommerce_Sales_Report_Microsoft_Fabric/blob/6077c315a7b109216bb36493a834c88bedd72207/Screenshots/SS_21.png)
+
+One more thing! You will also need to add a permission to the pg_write_all_data group which will let the login delete rows in the database, you can do that by running this query in admin mode:
+```
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT DELETE ON TABLES TO pg_write_all_data;
+```
+
 Now, we are ready to make a Power BI report
 ## Make a Power BI Desktop report in Import Mode
 - Lets open Power BI and go to get data where you can search for PostgreSQL and once select it will ask you for the server IP and the name of the database
