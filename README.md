@@ -202,6 +202,36 @@ The reason we are using the PostgreSQL is beacuse it is free to use and it is op
 To do this we are going to use a small python script, I am sure you can do the same in Power BI but as long as we reach our goals the questions about which tools we use are inconsequential.
 Here is the python script that I used:
 ```
+import pandas as pd
+
+
+df = pd.read_csv(
+		"[Input File Path]",
+		sep=",",
+		header=0,
+		index_col=None,
+		encoding="utf-8",
+		)
+
+print(df.head(10))
+
+
+df["Date"] = df["Date"].str[:10]
+
+print(df.head(10))
+
+try:
+	df.to_csv(
+		"[Output File Path]",
+		index=False, 
+		sep=",",
+		encoding="utf-8",
+	)
+	print("Written")
+
+except Exception as error:
+	print(error)
+
 ```
 You will have to run this script for three columns 'DateDim.date', 'DateDim.First Day of Month' and 'Orders.OrderDate', also you will need pandas for this, this is how I installed it in Anaconda(More on it in the Test section).
 ```
@@ -210,14 +240,14 @@ conda install pandas
 
 10. To import, right click on the table and select Import/Export data option which will pop up a window where toggle to Import mode, give the file path, .csv format, and encoding to UTF8. Also go to options and toggle and enable to header option and the limiter to ','
 11. Do the same for Cusotmers, Orders, DateDim and Products tables and run a sample query which should give you an output like below:
-![Image](Image)
+![Image](https://github.com/tirthvyas95/Ecommerce_Sales_Report_Microsoft_Fabric/blob/a9f26e820af62b93b35cbbc19faaa790aa06441d/Screenshots/SS_14.png)
 Now, we are ready to make a Power BI report
 ## Make a Power BI Desktop report in Import Mode
 - Lets open Power BI and go to get data where you can search for PostgreSQL and once select it will ask you for the server IP and the name of the database
 - Cick next and it should prompt you for the login credentials, enter in the one we made in PostgreSQL specifiaclly with just the permission to read the data. You can manage you credentials in data source settings File > Options and settings > Login Credintials > Data source settings
 - Once it is setup correctly the next windows will show you the tables and thier heads, select all 4 tables and click on load
 - Now make the relationships if Power BI has not picked up on them already, your model should look like this:
-![Image](Image)
+![Image](https://github.com/tirthvyas95/Ecommerce_Sales_Report_Microsoft_Fabric/blob/a9f26e820af62b93b35cbbc19faaa790aa06441d/Screenshots/SS_4.png)
 - Now lets add our measures, we are going to use simple measures as complex measures can not be converted to navtive queries in DirectQuery mode where [QueryFolding](https://learn.microsoft.com/en-us/power-query/query-folding-basics) takes place. Most of the Time Intelligence Funcitons are not available in DirectQuery mode for the same reason
 - Go to data model view and add this measures one by one, also a good practice is to make a seperate folder for all the measures:
 Average Discount:
@@ -252,19 +282,20 @@ Revenue Lost Due to Discounts = [Gross Sales] * [Average Discount]
 - To make this go to the model view and click New Parameter in Home where select fields and name the measure for my case I did Select Measure, now from the Orders table add these three measures mentioned above
 - This will enable us to just put this in the values section of the visualization and it will change according to the selected measure
 - Now, you can add visualizations and make your report look something like this:
-![Image](Image)
+![Image](https://github.com/tirthvyas95/Ecommerce_Sales_Report_Microsoft_Fabric/blob/a9f26e820af62b93b35cbbc19faaa790aa06441d/Screenshots/SS_1.png)
 - Finally, publish to report to the choice of your workspace which will create a report file and a semantic model file in the workspace where other users can open the report and use the semantic model in their own reports
 Now lets make the same report in DirectQuery mode
 ## Make a Power BI Desktop report in DirectQuery
 Most of the steps that we did in the previous report are similar here but with some changes :
 - Open Power BI Desktop and go to get data option and search for PostgreSQL, now when it asks you for the ip of the server enable the radio button beside the DirectQuery mode and load all the tables
 - In this case the relationships will not be made automatically as Power BI does not load any data in the model in DirectQuery so it does not have any data to check. Instead, you will have to make the relationships by yourself like follows:
-![Image](Image)
+![Image](https://github.com/tirthvyas95/Ecommerce_Sales_Report_Microsoft_Fabric/blob/9399e28616f8f3c1c3f5a72fe4325a82e0e473d8/Screenshots/SS_15.png)
+![Image](https://github.com/tirthvyas95/Ecommerce_Sales_Report_Microsoft_Fabric/blob/9399e28616f8f3c1c3f5a72fe4325a82e0e473d8/Screenshots/SS_2.png)
 - Now, you can add all the measure and make visualizations like just before but the important point to note is that no data has been imported in the model every time you open Power BI or change the select measure or even interact with the visualization the main source which is in our case PostgreSQL is queried be it with some caching ofcourse.
 Here is the Report in DirectQuery mode:
-![Image](Image)
-You can publish the same report to Power BI service/Microsoft Fabric Environment and it will again create two file the semantic model and the report but pay attention to the size of the semantic model you can see it is siginificantly lower:
-![Image](Image)
+![Image](https://github.com/tirthvyas95/Ecommerce_Sales_Report_Microsoft_Fabric/blob/e7f4f5cf9e2f51225d9f8765e4558fa6826ced99/Screenshots/SS_16.png)
+You can publish the same report to Power BI service/Microsoft Fabric Environment and it will again create two file the semantic model and the report:
+![Image](https://github.com/tirthvyas95/Ecommerce_Sales_Report_Microsoft_Fabric/blob/693f453643fff83021d08b09df1991cad63cb7a3/Screenshots/SS_17.png)
 An important point to note is that you need to make sure that to database is able to serve the queries in large amounts if you are planning to share the report with a large audiance, because every time the report is opened in the Power BI service the main data source is queried.
 ## Install On-Premises Data Gateway and Set up connection to Microsoft Fabric Platform
 - The final piece of our puzzle is to set up our On-premises Data Gateway and connect it to Microsoft Fabric Platfrom. On-premises data gateway is a Microsoft Software that can be installed on the system that is hosting the database and it act as a bridge to provide quick and secure data transfer between local machine/system which is hosting the database service and Microsft Fabric Platform. - You can download the On-premises data gateway [here](https://docs.azure.cn/en-us/analysis-services/azure-analysis-services/analysis-services-gateway-install?tabs=azure-portal) and you can find more information [here](https://learn.microsoft.com/en-us/power-bi/connect-data/service-gateway-onprem) and [here](https://docs.azure.cn/en-us/analysis-services/azure-analysis-services/analysis-services-gateway-install?tabs=azure-portal) are the installation steps.
@@ -346,13 +377,14 @@ finally:
 ```
 Here are the results:
 1. With inserted OrderID = 1000001
-![Image](Image)
+![Image](https://github.com/tirthvyas95/Ecommerce_Sales_Report_Microsoft_Fabric/blob/b08b30469386a51be46527014dcd6b9f2d2fb6c2/Screenshots/SS_18.png)
 2. With inserted OrderID = 1000002
-![Image](Image)
+![Image](https://github.com/tirthvyas95/Ecommerce_Sales_Report_Microsoft_Fabric/blob/b08b30469386a51be46527014dcd6b9f2d2fb6c2/Screenshots/SS_19.png)
 3. Removing everything after OrderID = 100000
+![Image](https://github.com/tirthvyas95/Ecommerce_Sales_Report_Microsoft_Fabric/blob/0dc6c8ae3735564cc90abc1750b07f923128c6c0/Screenshots/SS_20.png)
 
 **Thus we have demonstrated that our database installed in the local machine is succesfully being queried by the Report on Power BI Service**
-##References
+## References
 1. Microsoft Learn, Microsoft Learn's Data Analyst Career Path. Retrieved December 26, 2025, from https://learn.microsoft.com/en-us/training/career-paths/data-analyst
 2. techFAQ, techFAQ's Youtube Channel, Retieved December 26, 2025, from https://www.youtube.com/watch?v=M2NzvnfS-hI
 3. SQLBI, SQLBI's Youtube Channel, Retrieved December 26, 2025. from https://www.youtube.com/watch?v=gZ4JcqFwJfg&list=PLU6II7MW-aiJ3Z-wbUQ0tkqSbAkyiB3uy
